@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maternal Adaptation During Pregnancy Flashcards</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            min-height: 100vh;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            height: 95vh;
+            max-height: 95vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.1"><path d="M30,30 Q50,10 70,30 T90,50 T70,70 T50,90 T30,70 T10,50 T30,30 Z" fill="white"/></svg>');
+        }
+        
+        .header h1 {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .header .subtitle {
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            opacity: 0.9;
+            position: relative;
+        }
+        
+        .progress {
+            background: #2F1B0A;
+            height: 8px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #8B4513, #D2691E);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .flashcard {
+            padding: clamp(10px, 3vw, 20px);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+            overflow-y: auto;
+        }
+        
+        .question-container {
+            display: flex;
+            gap: clamp(10px, 2vw, 15px);
+            align-items: flex-start;
+            margin-bottom: clamp(10px, 2vw, 15px);
+        }
+        
+        .question-icon {
+            background: #8B4513;
+            color: white;
+            width: clamp(35px, 8vw, 50px);
+            height: clamp(35px, 8vw, 50px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+        }
+        
+        .question {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            line-height: 1.6;
+            color: #2F1B0A;
+            flex-grow: 1;
+            font-weight: 500;
+        }
+        
+        .multiple-select-indicator {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(6px, 1.5vw, 10px);
+            margin-bottom: clamp(10px, 2vw, 20px);
+            flex: 1;
+        }
+        
+        .option {
+            padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 18px);
+            border: 2px solid #e8eaf6;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            display: flex;
+            align-items: center;
+            gap: clamp(8px, 1.5vw, 10px);
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+        
+        .option:hover {
+            background: #f0f3ff;
+            border-color: #b3b7ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .option-letter {
+            background: #f0f3ff;
+            color: #2F1B0A;
+            width: clamp(24px, 5vw, 28px);
+            height: clamp(24px, 5vw, 28px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+        }
+        
+        /* CORRECT - ALWAYS GREEN */
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .option.correct .option-letter {
+            background: #28a745;
+            color: white;
+        }
+        
+        /* INCORRECT - ALWAYS RED */
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .option.incorrect .option-letter {
+            background: #dc3545;
+            color: white;
+        }
+        
+        /* Remove the selected class to prevent blue highlighting */
+        
+        .feedback {
+            padding: clamp(12px, 2.5vw, 16px);
+            border-radius: 12px;
+            margin-bottom: clamp(10px, 2vw, 16px);
+            display: none;
+            align-items: center;
+            gap: clamp(8px, 1.5vw, 12px);
+            font-weight: 500;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            display: flex;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            display: flex;
+        }
+        
+        .feedback-icon {
+            font-size: clamp(1.2rem, 3vw, 1.4rem);
+            flex-shrink: 0;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: clamp(12px, 2.5vw, 16px) clamp(16px, 3vw, 24px);
+            background: #f0f3ff;
+            border-top: 1px solid #e8eaf6;
+            flex-shrink: 0;
+        }
+        
+        .counter {
+            font-weight: bold;
+            color: #2F1B0A;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+        
+        .btn {
+            padding: clamp(10px, 2vw, 12px) clamp(15px, 2.5vw, 20px);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: clamp(6px, 1vw, 8px);
+            font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(139, 69, 19, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #b3b7ff, #8B4513);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(179, 183, 255, 0.3);
+        }
+        
+        .rationale {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid #ffd43b;
+            border-radius: 12px;
+            padding: clamp(12px, 2.5vw, 16px);
+            margin-top: clamp(8px, 1.5vw, 12px);
+            display: none;
+        }
+        
+        .rationale.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        
+        .rationale h4 {
+            color: #856404;
+            margin-bottom: clamp(6px, 1.2vw, 10px);
+            display: flex;
+            align-items: center;
+            gap: clamp(6px, 1.2vw, 8px);
+            font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+        }
+        
+        .rationale p {
+            color: #856404;
+            line-height: 1.6;
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stats {
+            display: flex;
+            gap: clamp(8px, 1.5vw, 15px);
+            justify-content: center;
+            margin-top: clamp(4px, 1vw, 10px);
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.2);
+            padding: clamp(5px, 1vw, 6px) clamp(8px, 1.8vw, 12px);
+            border-radius: 20px;
+            font-size: clamp(0.7rem, 1.6vw, 0.85rem);
+            white-space: nowrap;
+        }
+        
+        /* Cancel selection button */
+        .cancel-selection {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            margin: 0 auto clamp(10px, 2vw, 15px) auto;
+            display: none;
+        }
+        
+        .cancel-selection:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(231, 76, 60, 0.3);
+        }
+        
+        .cancel-selection.show {
+            display: flex;
+        }
+        
+        /* Study mode controls */
+        .study-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .study-btn {
+            padding: 8px 16px;
+            border: 2px solid #8B4513;
+            background: white;
+            color: #8B4513;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .study-btn.active {
+            background: #8B4513;
+            color: white;
+        }
+        
+        .study-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.2);
+        }
+        
+        /* Multiple select instructions */
+        .multiple-select-instructions {
+            text-align: center;
+            color: #e74c3c;
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤰 Maternal Adaptation During Pregnancy</h1>
+            <div class="subtitle">Chapter 11 - 30 Questions | Multiple-Select Enabled</div>
+            <div class="stats">
+                <div class="stat">🎯 30 Questions</div>
+                <div class="stat">📖 Detailed Rationales</div>
+                <div class="stat">🔢 6 Multiple-Answer Questions</div>
+                <div class="stat">↩️ Cancel Wrong Answers</div>
+            </div>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="flashcard">
+            <div class="study-controls">
+                <button class="study-btn active" id="allQuestionsBtn" onclick="setStudyMode('all')">All Questions</button>
+                <button class="study-btn" id="multipleSelectBtn" onclick="setStudyMode('multiple')">Multiple-Select Only</button>
+                <button class="study-btn" id="singleSelectBtn" onclick="setStudyMode('single')">Single-Select Only</button>
+                <button class="study-btn" id="incorrectBtn" onclick="setStudyMode('incorrect')">Review Incorrect</button>
+            </div>
+            
+            <div class="question-container">
+                <div class="question-icon">?</div>
+                <div class="question" id="question"></div>
+                <div class="multiple-select-indicator" id="multipleSelectIndicator" style="display: none;">Multiple Answers</div>
+            </div>
+            
+            <div class="multiple-select-instructions" id="multipleSelectInstructions" style="display: none;">
+                💡 Select ALL correct answers - This question has multiple correct options
+            </div>
+            
+            <div class="options" id="options"></div>
+            
+            <!-- Cancel Selection Button - Only shows for wrong answers -->
+            <button class="btn cancel-selection" id="cancelBtn" onclick="cancelSelection()">
+                ↩️ Cancel Selection
+            </button>
+            
+            <div class="feedback" id="feedback">
+                <div class="feedback-icon" id="feedbackIcon"></div>
+                <div id="feedbackText"></div>
+            </div>
+            <div class="rationale" id="rationale">
+                <h4>💡 Rationale:</h4>
+                <p id="rationaleText"></p>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button class="btn btn-secondary" id="prevBtn" onclick="previousCard()">
+                ⬅️ Previous
+            </button>
+            <div class="counter" id="counter">1/30</div>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextCard()">
+                Next ➡️
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "1. During a vaginal exam, the nurse notes that the lower uterine segment is softened. The nurse documents this finding as:",
+                options: [
+                    "Hegar sign.",
+                    "Goodell sign.",
+                    "Chadwick sign.",
+                    "Ortolani sign."
+                ],
+                correct: 0,
+                rationale: "Hegar sign refers to the softening of the lower uterine segment or isthmus. Bluish coloration of the cervix is termed Chadwick sign. Goodell sign refers to the softening of the cervix. Ortolani sign is a maneuver done to identify developmental dysplasia of the hip in infants."
+            },
+            {
+                question: "2. The nurse teaches a primigravida client that lightening occurs about 2 weeks before the onset of labor. What will the mother likely experience at that time?",
+                options: [
+                    "dysuria",
+                    "dyspnea",
+                    "constipation",
+                    "urinary frequency"
+                ],
+                correct: 3,
+                rationale: "Lightening refers to the descent of the fetal head into the pelvis and engagement. With this descent, pressure on the diaphragm decreases, easing breathing, but pressure on the bladder increases, leading to urinary frequency. Dysuria might indicate a urinary tract infection. Constipation may occur throughout pregnancy due to decreased peristalsis, but it is unrelated to lightening."
+            },
+            {
+                question: "3. A gravida 2 para 1 client in the 10th week of her pregnancy says to the nurse, \"I've never urinated as often as I have for the past three weeks.\" Which response would be most appropriate for the nurse to make?",
+                options: [
+                    "\"Having to urinate so often is annoying. I suggest that you watch how much fluid you are drinking and limit it.\"",
+                    "\"You shouldn't be urinating this frequently now; it usually stops by the time you're eight weeks pregnant. Is there anything else bothering you?\"",
+                    "\"By the time you are 12 weeks pregnant, this frequent urination should really decrease, but it is likely to return toward the end of your pregnancy.\"",
+                    "\"Women having their second child generally don't have frequent urination. Are you experiencing any burning sensations?\""
+                ],
+                correct: 2,
+                rationale: "As the uterus grows, it presses on the urinary bladder, causing the increased frequency of urination during the first trimester. This complaint lessens during the second trimester only to reappear in the third trimester as the fetus begins to descend into the pelvis, causing pressure on the bladder."
+            },
+            {
+                question: "4. In a client's seventh month of pregnancy, she reports feeling \"dizzy, like I'm going to pass out, when I lie down flat on my back.\" The nurse explains that this is due to:",
+                options: [
+                    "pressure of the gravid uterus on the vena cava.",
+                    "a 50% increase in blood volume.",
+                    "physiologic anemia due to hemoglobin decrease.",
+                    "pressure of the presenting fetal part on the diaphragm."
+                ],
+                correct: 0,
+                rationale: "The client is describing symptoms of supine hypotension syndrome, which occurs when the heavy gravid uterus falls back against the superior vena cava in the supine position. The vena cava is compressed, reducing venous return, cardiac output, and blood pressure, with increased orthostasis. The increased blood volume and physiologic anemia are unrelated to the client's symptoms. Pressure on the diaphragm would lead to dyspnea."
+            },
+            {
+                question: "5. A primiparous client is being seen in the clinic for her first prenatal visit. It is determined that she is 11 weeks pregnant. The nurse develops a teaching plan to educate the client about what she will most likely experience during this period. Which possible effect would the nurse include?",
+                options: [
+                    "ankle edema",
+                    "urinary frequency",
+                    "backache",
+                    "hemorrhoids"
+                ],
+                correct: 1,
+                rationale: "The client is in her first trimester and would most likely experience urinary frequency as the growing uterus presses on the bladder. Ankle edema, backache, and hemorrhoids would be more common during the later stages of pregnancy."
+            },
+            {
+                question: "6. The nurse is discussing the insulin needs of a primiparous client with diabetes who has been using insulin for the past few years. The nurse informs the client that her insulin needs will increase during pregnancy based on the nurse's understanding that the placenta produces:",
+                options: [
+                    "hCG, which increases maternal glucose levels.",
+                    "hPL, which deceases the effectiveness of insulin.",
+                    "estriol, which interferes with insulin crossing the placenta.",
+                    "relaxin, which decreases the amount of insulin produced."
+                ],
+                correct: 1,
+                rationale: "Human placental lactogen (hPL) acts as an antagonist to insulin, so the mother must produce more insulin to overcome this resistance. If the mother has diabetes, then her insulin need would most likely increase to meet this demand. Human chorionic gonadotropin (hCG) does not affect insulin and glucose level. Estrogen, not estriol, is believed to oppose insulin. In addition, insulin does not cross the placenta. Relaxin is not associated with insulin resistance."
+            },
+            {
+                question: "7. When teaching a pregnant client about the physiologic changes of pregnancy, the nurse reviews the effect of pregnancy on glucose metabolism. Which underlying reason for the effect would the nurse include?",
+                options: [
+                    "Pancreatic function is affected by pregnancy.",
+                    "Glucose is utilized more rapidly during a pregnancy.",
+                    "The pregnant woman increases her dietary intake.",
+                    "Glucose moves through the placenta to assist the fetus."
+                ],
+                correct: 3,
+                rationale: "The growing fetus has large needs for glucose, amino acids, and lipids, placing demands on maternal glucose stores. During the first half of pregnancy, much of the maternal glucose is diverted to the growing fetus. The pancreas continues to function during pregnancy. However, the placental hormones can affect maternal insulin levels. The demand for glucose by the fetus during pregnancy is high, but it is not necessarily used more rapidly. Placental hormones, not the woman's dietary intake, play a major role in glucose metabolism during pregnancy."
+            },
+            {
+                question: "8. A nurse strongly encourages a pregnant client to avoid eating swordfish and tilefish because these fish contain which component?",
+                options: [
+                    "excess folic acid, which could increase the risk for neural tube defects",
+                    "mercury, which could harm the developing fetus if eaten in large amounts",
+                    "lactose, which leads to abdominal discomfort, gas, and diarrhea",
+                    "low-quality protein that does not meet the woman's requirements"
+                ],
+                correct: 1,
+                rationale: "Nearly all fish and shellfish contain traces of mercury, and some contain higher levels of mercury that may harm the developing fetus if ingested by pregnant women in large amounts. Among these fish are shark, swordfish, king mackerel, and tilefish. Folic acid is found in dark green vegetables, baked beans, black-eyed peas, citrus fruits, peanuts, and liver. Folic acid supplements are needed to prevent neural tube defects. Women who are lactose-intolerant experience abdominal discomfort, gas, and diarrhea if they ingest foods containing lactose. Fish and shellfish are an important part of a healthy diet because they contain high-quality proteins, are low in saturated fat, and contain omega-3 fatty acids."
+            },
+            {
+                question: "9. Which change in the musculoskeletal system would the nurse mention when teaching a group of pregnant women about the physiologic changes of pregnancy?",
+                options: [
+                    "ligament tightening",
+                    "decreased swayback",
+                    "increased lordosis",
+                    "joint contraction"
+                ],
+                correct: 2,
+                rationale: "With pregnancy, the woman's center of gravity shifts forward, requiring a realignment of the spinal curvatures. There is an increase in the normal lumbosacral curve (lordosis). Ligaments of the sacroiliac joints and pubis symphysis soften and stretch. Increased swayback and an upper spine extension to compensate for the enlarging abdomen occur. Joint relaxation and increased mobility occur due to the influence of the hormones relaxin and progesterone."
+            },
+            {
+                question: "10. Assessment of a pregnant woman reveals a pigmented line down the middle of her abdomen. The nurse documents this as which finding?",
+                options: [
+                    "linea nigra",
+                    "striae gravidarum (stretch marks)",
+                    "melasma (chloasma)",
+                    "vascular spiders"
+                ],
+                correct: 0,
+                rationale: "Linea nigra refers to the darkened line of pigmentation down the middle of the abdomen in pregnant women. Striae gravidarum refers to stretch marks, irregular reddish streaks on the abdomen, breasts, and buttocks. Melasma (chloasma) refers to the increased pigmentation on the face, also known as the \"mask of pregnancy.\" Vascular spiders are small, spiderlike blood vessels that appear usually above the waist and on the neck, thorax, face, and arms."
+            },
+            {
+                question: "11. A nurse is assessing a pregnant woman on a routine checkup. When assessing the woman's gastrointestinal tract, what would the nurse expect to find? Select all that apply.",
+                options: [
+                    "hyperemic gums",
+                    "increased peristalsis",
+                    "reports of bloating",
+                    "heartburn",
+                    "nausea"
+                ],
+                correct: [0, 2, 3, 4],
+                rationale: "Gastrointestinal system changes include hyperemic gums due to estrogen and increased proliferation of blood vessels and circulation to the mouth; slowed peristalsis; acid indigestion and heartburn; bloating and nausea and vomiting."
+            },
+            {
+                question: "12. A woman suspecting she is pregnant asks the nurse about which signs would confirm her pregnancy. The nurse would explain that which sign would confirm the pregnancy?",
+                options: [
+                    "absence of menstrual period",
+                    "abdominal enlargement",
+                    "palpable fetal movement",
+                    "morning sickness"
+                ],
+                correct: 2,
+                rationale: "Only positive signs of pregnancy would confirm a pregnancy. The positive signs of pregnancy confirm that a fetus is growing in the uterus. Visualizing the fetus by ultrasound, palpating for fetal movements, and hearing a fetal heartbeat are all signs that make the pregnancy a certainty. Absence of menstrual period and morning sickness are presumptive signs, which can be due to conditions other than pregnancy. Abdominal enlargement is a probable sign."
+            },
+            {
+                question: "13. A nurse is developing a teaching plan about nutrition for a group of pregnant women. Which recommendations would the nurse include in the discussion? Select all that apply.",
+                options: [
+                    "Keep weight gain to 15 lb (6.8 kg).",
+                    "Eat three meals with snacking.",
+                    "Limit the use of salt in cooking.",
+                    "Avoid using diuretics.",
+                    "Participate in physical activity."
+                ],
+                correct: [1, 3, 4],
+                rationale: "To promote optimal nutrition, the nurse would recommend gradual and steady weight gain based on the client's prepregnant weight, eating three meals with one or two snacks daily, not restricting the use of salt unless instructed to do so by the health care provider, avoiding the use of diuretics, and participating in reasonable physical activity daily."
+            },
+            {
+                question: "14. Assessment of a pregnant woman reveals that she compulsively craves ice. The nurse documents this finding as",
+                options: [
+                    "quickening.",
+                    "pica.",
+                    "ballottement.",
+                    "linea nigra."
+                ],
+                correct: 1,
+                rationale: "Pica refers to the compulsive ingestion of nonfood substances such as ice. Quickening refers to the mother's sensation of fetal movement. Ballottement refers to the feeling of rebound from a floating fetus when an examiner pushes against the woman's cervix during a pelvic examination. Linea nigra refers to the pigmented line that develops in the middle of the woman's abdomen."
+            },
+            {
+                question: "15. A woman in her second trimester comes for a follow-up visit and says to the nurse, \"I feel like I'm on an emotional roller-coaster.\" Which response by the nurse would be most appropriate?",
+                options: [
+                    "\"How often has this been happening to you?\"",
+                    "\"Maybe you need some medication to level things out.\"",
+                    "\"Mood swings are completely normal during pregnancy.\"",
+                    "\"Have you been experiencing any thoughts of harming yourself?\""
+                ],
+                correct: 2,
+                rationale: "Emotional lability is characteristic throughout most pregnancies. One moment a woman can feel great joy, and within a short time she can feel shock and disbelief. Frequently, pregnant women will start to cry without any apparent cause. Some women feel as though they are riding an \"emotional roller-coaster.\" These extremes in emotion can make it difficult for partners and family members to communicate with the pregnant woman without placing blame on themselves for their mood changes. Clear explanations about how common mood swings are during pregnancy are essential."
+            },
+            {
+                question: "16. While talking with a woman in her third trimester, the nurse understands that which behavior indicates that the woman is learning to give of oneself?",
+                options: [
+                    "showing concern for self and fetus as a unit",
+                    "unconditionally accepting the pregnancy without rejection",
+                    "longing to hold infant",
+                    "questioning ability to become a good mother"
+                ],
+                correct: 3,
+                rationale: "Learning to give of oneself would be demonstrated when the woman questions her ability to become a good mother to the infant. Showing concern for herself and fetus as a unit reflects the task of ensuring safe passage throughout pregnancy and birth. Unconditionally accepting the pregnancy reflects the task of seeking acceptance of the infant by others. Longing to hold the infant reflects the task of seeking acceptance of self in the maternal role to the infant."
+            },
+            {
+                question: "17. A nurse is assessing a client who may be pregnant. The nurse reviews the client's history for presumptive signs. Which signs would the nurse most likely note? Select all that apply.",
+                options: [
+                    "amenorrhea",
+                    "nausea",
+                    "abdominal enlargement",
+                    "Braxton-Hicks contractions",
+                    "fetal heart sounds"
+                ],
+                correct: [0, 1],
+                rationale: "Presumptive signs include amenorrhea, nausea, breast tenderness, urinary frequency and fatigue. Abdominal enlargement and Braxton-Hicks contractions are probable signs of pregnancy. Fetal heart sounds are a positive sign of pregnancy."
+            },
+            {
+                question: "18. After teaching a refresher class to a group of prenatal clinic nurses about pregnancy, insulin, and glucose, the nurse determines that additional teaching is needed when the group identifies which hormone as being involved with opposing insulin?",
+                options: [
+                    "prolactin",
+                    "estrogen",
+                    "progesterone",
+                    "aldosterone"
+                ],
+                correct: 3,
+                rationale: "Prolactin, estrogen, and progesterone are all thought to oppose insulin. As a result, glucose is less likely to enter the mother's cells and is more likely to cross over the placenta to the fetus. Aldosterone does not oppose insulin."
+            },
+            {
+                question: "19. A pregnant woman comes to the clinic and tells the nurse that she has been having a whitish vaginal discharge. The nurse suspects vulvovaginal candidiasis based on which assessment finding?",
+                options: [
+                    "fever",
+                    "vaginal itching",
+                    "urinary frequency",
+                    "incontinence"
+                ],
+                correct: 1,
+                rationale: "Vaginal secretions become more acidic, white, and thick during pregnancy. Most women experience an increase in a whitish vaginal discharge, called leukorrhea. This is normal except when it is accompanied by itching and irritation, possibly suggesting Candida albicans, a monilial vaginitis, which is a very common occurrence in this glycogen-rich environment. Fever would suggest a more serious infection. Urinary frequency occurs commonly in the first trimester, disappears during the second trimester, and reappears during the third trimester. Incontinence would not be associated with a vulvovaginal candidiasis. Incontinence would require additional evaluation."
+            },
+            {
+                question: "20. A woman is at 20 weeks' gestation. The nurse would expect to find the fundus at which area?",
+                options: [
+                    "just above the symphysis pubis",
+                    "midway between the pubis and umbilicus",
+                    "at the level of the umbilicus",
+                    "midway between the umbilicus and xiphoid process"
+                ],
+                correct: 2,
+                rationale: "The uterus, which starts as a pear-shaped organ, becomes ovoid as length increases over width. By 20 weeks' gestation, the fundus, or top of the uterus, is at the level of the umbilicus and measures 20 cm. A monthly measurement of the height of the top of the uterus in centimeters, which corresponds to the number of gestational weeks, is commonly used to date the pregnancy."
+            },
+            {
+                question: "21. A woman comes to the prenatal clinic for an evaluation because she thinks that she may be pregnant. The nurse is assisting the health care provider with the vaginal examination. The exam reveals a vaginal mucosa and cervix that are bluish-purple in color. Based on this information, the nurse suspects that the client is most likely how many weeks pregnant?",
+                options: [
+                    "5 weeks",
+                    "6 weeks",
+                    "14 weeks",
+                    "16 weeks"
+                ],
+                correct: 1,
+                rationale: "The finding indicates Chadwick's sign, a bluish-purple discoloration of the vaginal mucosa and cervix. This typically occurs between 6 to 8 weeks. Goodell's sign (softening of the cervix) occurs at about 5 weeks. Abdominal enlargement typically begins at about 14 weeks and ballottement (when the examiner pushes against the woman's cervix during a pelvic examination and feels a rebound from the floating fetus) usually occurs at about 16 weeks."
+            },
+            {
+                question: "22. A nurse is monitoring a client's hCG levels because she has had a previous ectopic pregnancy and one spontaneous abortion. Which finding would the nurse interpret as indicating that the pregnancy is progressing appropriately?",
+                options: [
+                    "doubling of the level every 2 to 3 days",
+                    "plateauing of the level at 7 days",
+                    "gradually increasing levels every month",
+                    "abruptly declining levels after 60 days"
+                ],
+                correct: 0,
+                rationale: "Human chorionic gonadotropin (hCG) is a glycoprotein and the earliest biochemical marker for pregnancy. Many pregnancy tests are based on the recognition of hCG or a beta subunit of hCG. hCG levels in normal pregnancy usually double every 48 to 72 hours until they peak approximately 60 to 70 days after fertilization. At this point, they decrease to a plateau at 100 to 130 days of pregnancy."
+            },
+            {
+                question: "23. A nurse is providing nutritional counseling to a pregnant woman and gives her suggestions about consuming foods that are high in folic acid. As part of the plan of care, the client is to keep a food diary that the client and nurse will review at the next visit. When reviewing the client's diary, which meals would indicate to the nurse that the client is increasing her intake of folic acid? Select all that apply.",
+                options: [
+                    "chicken breast with baked potato and broccoli",
+                    "cheeseburger with spinach and baked beans",
+                    "pork chop with mashed potatoes and green beans",
+                    "strawberry walnut salad with romaine lettuce",
+                    "fried chicken sandwich with mayonnaise and avocado"
+                ],
+                correct: [0, 1, 3],
+                rationale: "Good food sources of folic acid include dark green vegetables, such as broccoli, romaine lettuce, and spinach; baked beans; black-eyed peas; citrus fruits; peanuts; and liver. So the meals containing chicken breast with baked potato and broccoli, cheeseburger with spinach and baked beans, and the strawberry walnut salad with romaine lettuce demonstrate an intake of foods high in folic acid."
+            },
+            {
+                question: "24. A pregnant woman asks the nurse, \"I've heard that I should avoid eating certain types of fish. So what fish can I eat?\" Which type of fish would the nurse recommend? Select all that apply.",
+                options: [
+                    "shark",
+                    "tilefish",
+                    "shrimp",
+                    "salmon",
+                    "catfish"
+                ],
+                correct: [2, 3, 4],
+                rationale: "The nurse should recommend eating up to 12 ounces (two average meals) weekly of low-mercury-level fish such as shrimp, canned light tuna, salmon, pollock, and catfish and avoid eating shark, swordfish, king mackerel, orange roughy, ahi tuna, and tilefish because they are high in mercury levels."
+            },
+            {
+                question: "25. A woman in her second trimester comes to the clinic for a routine follow-up visit. The woman's prepregnancy blood pressure was 112/70 mm Hg. On this visit, the woman's blood pressure is 104/64 mm Hg. The nurse would interpret this finding as suggestive of which event?",
+                options: [
+                    "A normal pregnancy finding secondary to progesterone effects",
+                    "Indication that the woman is experiencing orthostatic hypotension",
+                    "Signal that the woman is developing gestational hypertension",
+                    "Sign that the woman is anemic"
+                ],
+                correct: 0,
+                rationale: "Blood pressure, especially the diastolic pressure, declines slightly during pregnancy as a result of peripheral vasodilation caused by progesterone. It usually reaches a low point mid pregnancy and thereafter increases to prepregnancy levels until term. During the first trimester, blood pressure typically remains at the prepregnancy level. During the second trimester, the blood pressure decreases 5 to 10 mm Hg and thereafter returns to first-trimester levels. This decrease in blood pressure begins at about 7 weeks' gestation and persists until 32 weeks' gestation, when it begins to rise to prepregnancy levels. The client's blood pressure suggests a normal finding related to peripheral vasodilation from progesterone. Any significant rise in blood pressure during pregnancy should be investigated to rule out gestational hypertension. Gestational hypertension is a clinical diagnosis defined by the new onset of hypertension (systolic of 140 mm Hg or higher and/or diastolic of 90 mm Hg or higher) after 20 weeks' gestation. A lower blood pressure does not suggest anemia. Orthostatic hypotension occurs when the blood pressure drops more than 20 mm Hg systolic or 10 mm Hg diastolic with a change in position, such as going from a lying to a standing position."
+            },
+            {
+                question: "26. At a routine visit, a pregnant woman nearing the end of her second trimester tells the nurse, \"It is so strange. I lie down to go to sleep and then I have to get up to go to the bathroom. This always happens when I am trying to sleep.\" Which response by the nurse would be appropriate?",
+                options: [
+                    "\"You might be developing a urinary tract infection. Let's get a urine sample.\"",
+                    "\"Your kidneys increase their activity when you lie down causing you to urinate.\"",
+                    "\"Lying on your side instead of lying on your back will help stop this problem.\"",
+                    "\"Maybe you are drinking too much fluid before you go to bed.\""
+                ],
+                correct: 1,
+                rationale: "The activity of the kidneys normally increases when a person lies down and decreases upon standing. This difference is amplified during pregnancy, which is one reason a pregnant woman feels the need to urinate frequently while trying to sleep. Late in the pregnancy (third trimester), the increase in kidney activity is even greater when the woman lies on her side rather than her back. Lying on either side relieves the pressure that the enlarged uterus puts on the vena cava carrying blood from the legs. Subsequently, venous return to the heart increases, leading to increased cardiac output. Increased cardiac output results in increased renal perfusion and glomerular filtration. The woman has not voiced any reports suggesting a urinary tract infection. Fluid intake may be contributing to the woman's urination concern, but it is important for the woman to drink adequate amounts of fluid."
+            },
+            {
+                question: "27. A nurse is teaching a pregnant woman about ways to prevent the development of the food borne illness listeriosis. The nurse determines that the teaching was successful when the woman identifies the need to avoid which food(s)? Select all that apply.",
+                options: [
+                    "Soft cheeses",
+                    "Refrigerated meat spreads",
+                    "Canned tuna fish",
+                    "Store-made chicken salad",
+                    "Pasteurized milk"
+                ],
+                correct: [0, 1, 3],
+                rationale: "To prevent listeriosis, the woman should avoid soft cheeses such as feta, Brie, Camembert, and blue-veined cheeses, refrigerated pâté or meat spreads, refrigerated smoked seafood unless it is an ingredient in a cooked dish such as a casserole, salads made in the store such as ham salad, chicken salad, egg salad, tuna salad, or seafood salad, and unpasteurized milk. It is safe to eat canned or shelf-stable pâté and meat spreads and canned fish such as salmon and tuna or shelf-stable smoked seafood."
+            },
+            {
+                question: "28. The nurse is assessing a pregnant woman who is at 12 weeks' gestation. The woman's BMI was 18 prior to becoming pregnant. Her prepregnancy weight was 98 lb (44.5 kg). Which measurement would the nurse determine as appropriate weight gain for the woman during the first trimester?",
+                options: [
+                    "99 lb (45 kg)",
+                    "100 lb (45.5 kg)",
+                    "102 lb (46 kg)",
+                    "104 lb (47 kg)"
+                ],
+                correct: 3,
+                rationale: "During the first trimester, for underweight women, weight gain should be at least 5 lb (2.25 kg). For this woman with a prepregnancy weight of 98 lb (44.5), a weight of 104 lb (47 kg) would meet this criteria."
+            },
+            {
+                question: "29. A nurse is conducting a class for a group of pregnant women in their first trimester about the emotional responses that occur during pregnancy. Which response would the nurse identify as being seen commonly during the second trimester?",
+                options: [
+                    "Introversion",
+                    "Ambivalence",
+                    "Acceptance",
+                    "Emotional balance"
+                ],
+                correct: 2,
+                rationale: "During the second trimester, the physical changes of pregnancy, including an enlarging abdomen and fetal movement, bring a sense of reality and validity to the pregnancy leading to acceptance. Ambivalence, or having conflicting feelings at the same time, is a universal feeling and is considered normal when preparing for a lifestyle change and new role. Pregnant women commonly experience ambivalence during the first trimester. Usually ambivalence evolves into acceptance by the second trimester, when fetal movement is felt. Introversion seems to heighten during the first and third trimesters, when the woman's focus is on behaviors that will ensure a safe and health pregnancy outcome. Emotional lability, not emotional balance, is characteristic throughout most pregnancies. One moment a woman can feel great joy, and within a short time, she can feel shock and disbelief. It is not more common during one trimester or another."
+            },
+            {
+                question: "30. A nurse is assessing a pregnant woman and suspects that the woman may be experiencing pica. To help support this suspicion, the nurse evaluates the woman for signs and symptoms of which condition?",
+                options: [
+                    "Iron-deficiency anemia",
+                    "Urinary tract infection",
+                    "Diarrhea",
+                    "Heartburn"
+                ],
+                correct: 0,
+                rationale: "Three main substances consumed by women with pica are soil or clay (geophagia), ice (pagophagia), and laundry starch (amylophagia). Because each of these can lead to iron deficiency anemia, the nurse should evaluate the client for the condition. Urinary tract infection, diarrhea, and heartburn are not associated with pica."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let selectedOption = null;
+        let score = 0;
+        let answers = Array(questions.length).fill(null);
+        let incorrectQuestions = [];
+        let studyMode = 'all'; // 'all', 'multiple', 'single', 'incorrect'
+        let filteredQuestions = [...questions];
+
+        function setStudyMode(mode) {
+            studyMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.study-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(mode + 'Btn').classList.add('active');
+            
+            // Filter questions based on mode
+            switch(mode) {
+                case 'all':
+                    filteredQuestions = [...questions];
+                    break;
+                case 'multiple':
+                    filteredQuestions = questions.filter(q => Array.isArray(q.correct) && q.correct.length > 1);
+                    break;
+                case 'single':
+                    filteredQuestions = questions.filter(q => !Array.isArray(q.correct) || q.correct.length === 1);
+                    break;
+                case 'incorrect':
+                    filteredQuestions = questions.filter((_, index) => incorrectQuestions.includes(index));
+                    if (filteredQuestions.length === 0) {
+                        alert('No incorrect questions to review yet!');
+                        filteredQuestions = [...questions];
+                    }
+                    break;
+            }
+            
+            currentQuestion = 0;
+            loadQuestion();
+        }
+
+        function isMultipleSelectQuestion(question) {
+            return Array.isArray(question.correct) && question.correct.length > 1;
+        }
+
+        function loadQuestion() {
+            if (filteredQuestions.length === 0) {
+                document.getElementById('question').textContent = "No questions available for the selected study mode.";
+                document.getElementById('options').innerHTML = '';
+                document.getElementById('counter').textContent = `0/0`;
+                return;
+            }
+
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            document.getElementById('question').textContent = question.question;
+            document.getElementById('counter').textContent = `${currentQuestion + 1}/${filteredQuestions.length}`;
+            
+            // Update progress bar
+            const progress = ((currentQuestion + 1) / filteredQuestions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            
+            // Show/hide multiple select indicators
+            const isMultiple = isMultipleSelectQuestion(question);
+            document.getElementById('multipleSelectIndicator').style.display = isMultiple ? 'block' : 'none';
+            document.getElementById('multipleSelectInstructions').style.display = isMultiple ? 'block' : 'none';
+            
+            // Load options
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                optionElement.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Reset feedback and rationale
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('rationale').className = 'rationale';
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').textContent = currentQuestion === filteredQuestions.length - 1 ? 'Finish ➡️' : 'Next ➡️';
+            
+            // Check if we have a stored answer for this question
+            const storedAnswer = answers[originalIndex];
+            document.getElementById('nextBtn').disabled = storedAnswer === null || storedAnswer === undefined;
+            
+            // Reset cancel button visibility
+            document.getElementById('cancelBtn').classList.remove('show');
+            
+            // If this question was already answered, show the answer
+            if (storedAnswer !== null && storedAnswer !== undefined) {
+                if (Array.isArray(storedAnswer)) {
+                    // Multiple selection question
+                    storedAnswer.forEach(index => {
+                        selectOption(index, true);
+                    });
+                } else {
+                    // Single selection question
+                    selectOption(storedAnswer, true);
+                }
+            }
+        }
+
+        function selectOption(index, fromMemory = false) {
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            // Check if this is a multiple selection question
+            if (isMultipleSelectQuestion(question)) {
+                // Multiple selection logic
+                if (!fromMemory) {
+                    if (!answers[originalIndex]) {
+                        answers[originalIndex] = [];
+                    }
+                    
+                    const optionIndex = answers[originalIndex].indexOf(index);
+                    if (optionIndex === -1) {
+                        answers[originalIndex].push(index);
+                    } else {
+                        answers[originalIndex].splice(optionIndex, 1);
+                    }
+                }
+                
+                highlightSelectedOptions();
+                showFeedbackForMultiple();
+                
+                // Enable next button if at least one option is selected
+                document.getElementById('nextBtn').disabled = !answers[originalIndex] || answers[originalIndex].length === 0;
+                return;
+            }
+            
+            // Single selection logic
+            if (selectedOption !== null && !fromMemory) return;
+            
+            if (!fromMemory) {
+                selectedOption = index;
+                answers[originalIndex] = index;
+            }
+            
+            highlightSelectedOption(index);
+            showFeedback(index);
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function highlightSelectedOption(index) {
+            const options = document.querySelectorAll('.option');
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            options.forEach((option, i) => {
+                option.classList.remove('correct', 'incorrect');
+                
+                if (i === index) {
+                    // ALWAYS show correct answers in GREEN
+                    if (i === question.correct) {
+                        option.classList.add('correct');
+                        if (!answers[originalIndex]) score++;
+                        document.getElementById('cancelBtn').classList.remove('show');
+                        
+                        // Remove from incorrect questions if it was there
+                        const incorrectIndex = incorrectQuestions.indexOf(originalIndex);
+                        if (incorrectIndex > -1) {
+                            incorrectQuestions.splice(incorrectIndex, 1);
+                        }
+                    } else {
+                        // ALWAYS show incorrect answers in RED
+                        option.classList.add('incorrect');
+                        // Also highlight the correct answer in GREEN
+                        options[question.correct].classList.add('correct');
+                        document.getElementById('cancelBtn').classList.add('show');
+                        
+                        // Add to incorrect questions
+                        if (!incorrectQuestions.includes(originalIndex)) {
+                            incorrectQuestions.push(originalIndex);
+                        }
+                    }
+                }
+            });
+        }
+
+        function highlightSelectedOptions() {
+            const options = document.querySelectorAll('.option');
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            const selectedIndices = answers[originalIndex] || [];
+            
+            // First, highlight ALL correct answers in GREEN
+            question.correct.forEach(correctIndex => {
+                options[correctIndex].classList.add('correct');
+            });
+            
+            // Then, highlight selected options
+            options.forEach((option, i) => {
+                if (selectedIndices.includes(i)) {
+                    // If selected but incorrect, highlight in RED
+                    if (!question.correct.includes(i)) {
+                        option.classList.add('incorrect');
+                    }
+                }
+            });
+            
+            // Check if answer is correct and update score/tracking
+            const allCorrectSelected = question.correct.every(c => selectedIndices.includes(c));
+            const noIncorrectSelected = selectedIndices.every(s => question.correct.includes(s));
+            
+            if (allCorrectSelected && noIncorrectSelected) {
+                if (!answers[originalIndex]) score++;
+                // Remove from incorrect questions
+                const incorrectIndex = incorrectQuestions.indexOf(originalIndex);
+                if (incorrectIndex > -1) {
+                    incorrectQuestions.splice(incorrectIndex, 1);
+                }
+            } else {
+                // Add to incorrect questions
+                if (!incorrectQuestions.includes(originalIndex)) {
+                    incorrectQuestions.push(originalIndex);
+                }
+            }
+        }
+
+        function cancelSelection() {
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            selectedOption = null;
+            answers[originalIndex] = null;
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+            
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('rationale').classList.remove('show');
+            document.getElementById('cancelBtn').classList.remove('show');
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function showFeedback(index) {
+            const question = filteredQuestions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackText = document.getElementById('feedbackText');
+            const rationale = document.getElementById('rationale');
+            const rationaleText = document.getElementById('rationaleText');
+            
+            if (index === question.correct) {
+                feedback.className = 'feedback correct';
+                feedbackIcon.textContent = '✅';
+                feedbackText.textContent = 'Correct! Well done.';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedbackIcon.textContent = '❌';
+                feedbackText.textContent = `Incorrect. The right answer is: ${String.fromCharCode(65 + question.correct)}`;
+            }
+            
+            feedback.style.display = 'flex';
+            rationaleText.textContent = question.rationale;
+            rationale.classList.add('show');
+        }
+
+        function showFeedbackForMultiple() {
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            const feedback = document.getElementById('feedback');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackText = document.getElementById('feedbackText');
+            const rationale = document.getElementById('rationale');
+            const rationaleText = document.getElementById('rationaleText');
+            
+            const selectedIndices = answers[originalIndex] || [];
+            const allCorrectSelected = question.correct.every(c => selectedIndices.includes(c));
+            const noIncorrectSelected = selectedIndices.every(s => question.correct.includes(s));
+            
+            if (allCorrectSelected && noIncorrectSelected) {
+                feedback.className = 'feedback correct';
+                feedbackIcon.textContent = '✅';
+                feedbackText.textContent = 'Correct! All right answers selected.';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedbackIcon.textContent = '❌';
+                const correctLetters = question.correct.map(c => String.fromCharCode(65 + c)).join(', ');
+                feedbackText.textContent = `Incorrect. The right answers are: ${correctLetters}`;
+            }
+            
+            feedback.style.display = 'flex';
+            rationaleText.textContent = question.rationale;
+            rationale.classList.add('show');
+        }
+
+        function nextCard() {
+            if (currentQuestion < filteredQuestions.length - 1) {
+                currentQuestion++;
+                selectedOption = null;
+                loadQuestion();
+            } else {
+                const correctCount = questions.reduce((count, question, index) => {
+                    if (answers[index] === null || answers[index] === undefined) return count;
+                    
+                    if (Array.isArray(question.correct)) {
+                        const selected = answers[index] || [];
+                        const allCorrect = question.correct.every(c => selected.includes(c));
+                        const noIncorrect = selected.every(s => question.correct.includes(s));
+                        return allCorrect && noIncorrect ? count + 1 : count;
+                    } else {
+                        return answers[index] === question.correct ? count + 1 : count;
+                    }
+                }, 0);
+                
+                alert(`Quiz completed! Your score: ${correctCount}/${questions.length}\nIncorrect questions: ${incorrectQuestions.length}`);
+                
+                if (studyMode === 'incorrect' && incorrectQuestions.length > 0) {
+                    // Continue with incorrect questions
+                    filteredQuestions = questions.filter((_, index) => incorrectQuestions.includes(index));
+                    currentQuestion = 0;
+                    loadQuestion();
+                } else {
+                    // Reset to all questions
+                    currentQuestion = 0;
+                    selectedOption = null;
+                    score = 0;
+                    answers = Array(questions.length).fill(null);
+                    filteredQuestions = [...questions];
+                    setStudyMode('all');
+                }
+            }
+        }
+
+        function previousCard() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                const question = filteredQuestions[currentQuestion];
+                const originalIndex = questions.indexOf(question);
+                selectedOption = answers[originalIndex];
+                loadQuestion();
+            }
+        }
+
+        // Initialize the app
+        loadQuestion();
+    </script>
+</body>
+</html>
